@@ -1,2 +1,2 @@
 # Scripts
-Access, manage, and edit scripts for the CyberDawgs Team
+Access, manage, and edit Windows-based scripts for the CyberDawgs Team
