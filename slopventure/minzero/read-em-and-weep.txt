@@ -1,0 +1,6 @@
+Quick Usage Notes
+First run in a workgroup: Run .\Deploy.ps1 -TrustAllHosts so your jumpbox allows WinRM connections by IP address without Kerberos/DNS.
+
+Port 5985/5986: Make sure your systems\<host>\port-sources file includes 5985 (or 5986 for HTTPS) on line 1 if you want to keep WinRM open after Autofirewall.ps1 locks down the box.
+
+Password handling: Unlike deploy.sh (which writes a temporary pass_$DIR file for SUDO_ASKPASS), Deploy.ps1 keeps $OldPass in memory as a PSCredential, so no credential script ever touches disk.

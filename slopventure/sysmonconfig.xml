@@ -1,0 +1,72 @@
+<Sysmon schemaversion="4.90">
+  <HashAlgorithms>SHA256</HashAlgorithms>
+  <EventFiltering>
+
+    <!-- Process Creation (Event ID 1) -->
+    <RuleGroup name="ProcessCreateRules" groupRelation="or">
+      <ProcessCreate onmatch="include">
+        <!-- Recon (mirrors auditd -k recon) -->
+        <Image name="recon" condition="end with">\whoami.exe</Image>
+        <Image name="recon" condition="end with">\hostname.exe</Image>
+        <Image name="recon" condition="end with">\systeminfo.exe</Image>
+        <Image name="recon" condition="end with">\nltest.exe</Image>
+        <Image name="recon" condition="end with">\quser.exe</Image>
+        <Image name="recon" condition="end with">\qwinsta.exe</Image>
+        <Image name="recon" condition="end with">\net.exe</Image>
+        <Image name="recon" condition="end with">\net1.exe</Image>
+
+        <!-- Suspicious Activity (mirrors auditd -k susp_activity) -->
+        <Image name="susp_activity" condition="end with">\curl.exe</Image>
+        <Image name="susp_activity" condition="end with">\wget.exe</Image>
+        <Image name="susp_activity" condition="end with">\certutil.exe</Image>
+        <Image name="susp_activity" condition="end with">\bitsadmin.exe</Image>
+        <Image name="susp_activity" condition="end with">\nc.exe</Image>
+        <Image name="susp_activity" condition="end with">\ncat.exe</Image>
+        <Image name="susp_activity" condition="end with">\netcat.exe</Image>
+        <Image name="susp_activity" condition="end with">\netstat.exe</Image>
+        <Image name="susp_activity" condition="end with">\ssh.exe</Image>
+        <Image name="susp_activity" condition="end with">\scp.exe</Image>
+        <Image name="susp_activity" condition="end with">\sftp.exe</Image>
+        <Image name="susp_activity" condition="end with">\ftp.exe</Image>
+        <Image name="susp_activity" condition="end with">\nmap.exe</Image>
+        <Image name="susp_activity" condition="end with">\mshta.exe</Image>
+        <Image name="susp_activity" condition="end with">\vssadmin.exe</Image>
+        <Image name="susp_activity" condition="end with">\wmic.exe</Image>
+        <CommandLine name="susp_activity" condition="contains">-enc</CommandLine>
+        <CommandLine name="susp_activity" condition="contains">-EncodedCommand</CommandLine>
+        <CommandLine name="susp_activity" condition="contains">DownloadString</CommandLine>
+      </ProcessCreate>
+    </RuleGroup>
+
+    <!-- Network Connections from Shells / LOLBins (Event ID 3) -->
+    <RuleGroup name="NetworkConnectRules" groupRelation="or">
+      <NetworkConnect onmatch="include">
+        <Image name="susp_activity" condition="end with">\cmd.exe</Image>
+        <Image name="susp_activity" condition="end with">\powershell.exe</Image>
+        <Image name="susp_activity" condition="end with">\pwsh.exe</Image>
+        <Image name="susp_activity" condition="end with">\certutil.exe</Image>
+        <Image name="susp_activity" condition="end with">\mshta.exe</Image>
+      </NetworkConnect>
+    </RuleGroup>
+
+    <!-- Persistence File Creation (Event ID 11) -->
+    <RuleGroup name="FileCreateRules" groupRelation="or">
+      <FileCreate onmatch="include">
+        <TargetFilename name="persistence" condition="contains">\Start Menu\Programs\Startup\</TargetFilename>
+        <TargetFilename name="persistence" condition="contains">\Windows\System32\Tasks\</TargetFilename>
+        <TargetFilename name="persistence" condition="contains">\inetpub\wwwroot\</TargetFilename>
+        <TargetFilename name="persistence" condition="end with">\drivers\etc\hosts</TargetFilename>
+      </FileCreate>
+    </RuleGroup>
+
+    <!-- Registry Persistence (Event ID 12, 13, 14) -->
+    <RuleGroup name="RegistryRules" groupRelation="or">
+      <RegistryEvent onmatch="include">
+        <TargetObject name="persistence" condition="contains">\CurrentVersion\Run</TargetObject>
+        <TargetObject name="persistence" condition="contains">\Image File Execution Options\</TargetObject>
+        <TargetObject name="persistence" condition="contains">\AppInit_DLLs</TargetObject>
+      </RegistryEvent>
+    </RuleGroup>
+
+  </EventFiltering>
+</Sysmon>
