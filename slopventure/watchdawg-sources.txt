@@ -1,0 +1,7 @@
+C:\Windows\System32\drivers\etc\hosts
+C:\ProgramData\ssh\sshd_config
+C:\Windows\System32\Tasks
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+C:\Windows\System32\inetsrv\config
+C:\Windows\System32\GroupPolicy
+C:\inetpub\wwwroot

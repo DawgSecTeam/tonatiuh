@@ -1,0 +1,17 @@
+minzero/deploy.log
+minzero/hostfile
+minzero/pass_*
+minzero/resources.tar.gz
+minzero/resources.zip
+minzero/discordkey
+testing/.vagrant/
+testing/.env
+*.tar
+*.tar.gz
+*.zip
+*.wfw
+*.*.swp
+/*/*.*.swp
+scans/
+systems/*
+!systems/README.md
